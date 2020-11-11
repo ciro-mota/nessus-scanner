@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:stable-slim
 
 LABEL maintainer="ciromota"
 
@@ -8,7 +8,7 @@ RUN apt update -y \
 	
 RUN rm -rf /var/lib/apt/lists/*
 
-RUN wget https://www.tenable.com/downloads/api/v1/public/pages/nessus/downloads/11423/download?i_agree_to_tenable_license_agreement=true -O /tmp/nessus.deb
+RUN wget -qc https://www.tenable.com/downloads/api/v1/public/pages/nessus/downloads/11760/download?i_agree_to_tenable_license_agreement=true -O /tmp/nessus.deb
 
 RUN dpkg -i /tmp/nessus.deb	
 
