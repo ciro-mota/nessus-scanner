@@ -5,20 +5,40 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 
 [Nessus 8.11.x Docs](https://docs.tenable.com/nessus/Content/GettingStarted.htm)
 
-# Requirements
+## Requirements
 
-- Docker.
+- Docker or Podman.
 - Debian Slim image Docker.
 - License to use Nessus. You can get it [here](https://www.tenable.com/products/nessus/activation-code).
 
-# Build
+# Docker Support
+
+## Build
 
 - Clone this repository.
 - Run the command: `docker build -t nessus .`
 
-# Usage
+## Usage
 
 ```bash
 docker run -td --name nessus -p 8834:8834 -v \
 /etc/localtime:/etc/localtime nessus
 ```
+- Access `https://localhost:8834`
+
+# Podman Support
+
+[Podman](https://podman.io/) is a container engine for developing, managing and executing containers as an alternative to Docker.
+
+## Build
+
+- Clone this repository.
+- Run the command: `podman build -t nessus -f .`
+
+## Usage
+
+```bash
+podman run -td --name nessus -p 8834:8834 -v \
+/etc/localtime:/etc/localtime nessus
+```
+- Access `https://localhost:8834`
