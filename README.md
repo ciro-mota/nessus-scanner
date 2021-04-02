@@ -21,7 +21,7 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 ## Usage
 
 ```bash
-docker run -td --name nessus -p 8834:8834 -v \
+docker container run -td --name nessus -p 8834:8834 -v \
 /etc/localtime:/etc/localtime nessus
 ```
 - Access `https://localhost:8834`
@@ -42,3 +42,9 @@ podman run -td --name nessus -p 8834:8834 -v \
 /etc/localtime:/etc/localtime nessus
 ```
 - Access `https://localhost:8834`
+
+# Official Container
+
+Tenable Nessus from version 8.13.1 has its official container image.
+
+https://hub.docker.com/r/tenableofficial/nessus
