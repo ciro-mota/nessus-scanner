@@ -9,7 +9,7 @@ RUN apt update -y \
 	
 RUN rm -rf /var/lib/apt/lists/*
 
-RUN wget -qc https://www.tenable.com/downloads/api/v1/public/pages/nessus/downloads/12664/download?i_agree_to_tenable_license_agreement=true -O /tmp/nessus.deb
+RUN wget -qc https://www.tenable.com/downloads/api/v1/public/pages/nessus/downloads/12696/download?i_agree_to_tenable_license_agreement=true -O /tmp/nessus.deb
 
 RUN dpkg -i /tmp/nessus.deb	
 
