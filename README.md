@@ -45,6 +45,6 @@ podman run -td --name nessus -p 8834:8834 -v \
 
 # Official Container
 
-Tenable Nessus from version 8.13.1 has its official container image.
+Tenable Nessus from version 8.x.x has its official container image.
 
 https://hub.docker.com/r/tenableofficial/nessus
