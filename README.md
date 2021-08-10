@@ -16,14 +16,16 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 ## Build
 
 - Clone this repository.
-- Run the command: `docker build -t nessus .`
+- Run the command: `docker image build -t ciromota/nessus:latest .`
 
 ## Usage
 
 ```bash
 docker container run -td --name nessus -p 8834:8834 -v \
-/etc/localtime:/etc/localtime nessus
+/etc/localtime:/etc/localtime ciromota/nessus:latest
 ```
+Or through docker-compose `docker-compose up -d`
+
 - Access `https://localhost:8834`
 
 # Podman Support
