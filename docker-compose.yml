@@ -1,10 +1,9 @@
 version: "3.9"
 services:
   nessus:
-    image: "ciromota/nessus:latest"
-    build: .
+    image: "ciromota/nessus-scanner:latest"
+#    build: .
     ports:
       - "8834:8834"
     volumes:
        - /etc/localtime:/etc/localtime 
-    

@@ -16,15 +16,16 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 ## Build
 
 - Clone this repository.
-- Run the command: `docker image build -t ciromota/nessus:latest .`
+- Run the command: `docker image build -t ciromota/nessus-scanner:latest .`
+- Or uncomment line 5 in `docker-compose.yml` for build and run.
 
 ## Usage
 
 ```bash
-docker container run -td --name nessus -p 8834:8834 -v \
-/etc/localtime:/etc/localtime ciromota/nessus:latest
+docker container run -td --name nessus-scanner -p 8834:8834 -v \
+/etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
 ```
-Or through docker-compose `docker-compose up -d`
+Or through docker-compose: `docker-compose up -d`
 
 - Access `https://localhost:8834`
 
@@ -35,13 +36,13 @@ Or through docker-compose `docker-compose up -d`
 ## Build
 
 - Clone this repository.
-- Run the command: `podman build -t nessus -f .`
+- Run the command: `podman build -t ciromota/nessus-scanner:latest -f .`
 
 ## Usage
 
 ```bash
 podman run -td --name nessus -p 8834:8834 -v \
-/etc/localtime:/etc/localtime nessus
+/etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
 ```
 - Access `https://localhost:8834`
 
