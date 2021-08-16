@@ -6,4 +6,5 @@ services:
     ports:
       - "8834:8834"
     volumes:
-       - /etc/localtime:/etc/localtime 
+       - /etc/localtime:/etc/localtime
+    restart: on-failure   
