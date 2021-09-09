@@ -46,6 +46,34 @@ podman run -td --name nessus -p 8834:8834 -v \
 ```
 - Access `https://localhost:8834`
 
+# DockerSlim Support
+
+[DockerSlim](https://github.com/docker-slim/docker-slim) brings a new experience in container management keeping its same workflow, producing a smaller and secure container.
+
+Consult the documentation and learn about all its functions.
+
+## Build and usage
+
+You can run DockerSlim on top of the previously built image and reduce the size of the Nessus Scanner image without harm, just use the command below:
+
+```bash
+docker-slim build ciromota/nessus
+```
+
+Or, it is possible with the help of DockerSlim itself to build a new image based on the Dockerfile file contained in this repo. Use the command below:
+
+```bash
+docker-slim build --dockerfile Dockerfile --show-blogs --tag ciromota/nessus.slim .
+```
+
+In both cases, you can run the container in the same way:
+
+```bash
+docker container run -td --name nessus -p 8834:8834 -v \
+/etc/localtime:/etc/localtime ciromota/nessus.slim
+```
+- Access `https://localhost:8834`
+
 # Official Container
 
 Tenable Nessus from version 8.x.x has its official container image.
