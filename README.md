@@ -8,7 +8,7 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 
 ## Requirements
 
-- Docker or Podman.
+- Docker, or Podman, or DockerSlim, or Containerd/nerdctl.
 - Debian Slim image Docker.
 - License to use Nessus. You can get it [here](https://www.tenable.com/products/nessus/activation-code).
 
