@@ -1,25 +1,26 @@
 # Nessus Essential Scanner (não oficial)
-<img src="https://img.shields.io/badge/Licença-GPLv3-blue.svg?style=for-the-badge"> <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"> <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ciro-mota/nessus-scanner?style=for-the-badge"> <img alt="Docker Image Size (tag)" src="https://img.shields.io/docker/image-size/ciromota/nessus-scanner/latest?style=for-the-badge">
+<img src="https://img.shields.io/badge/Licença-GPLv3-blue.svg?style=for-the-badge" title="Licença destes scripts"> <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"> <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ciro-mota/nessus-scanner?style=for-the-badge"> <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/ciro-mota/nessus-scanner/Docker%20Nessus-Scanner%20CI?style=for-the-badge"> <img alt="Docker Image Size (tag)" src="https://img.shields.io/docker/image-size/ciromota/nessus-scanner/latest?style=for-the-badge">
 
 O Nessus Scanner da Tenable é um scanner de vulnerabilidades que procura vulnerabilidades conhecidas, problemas de configuração e muito mais, inspecionando hosts na rede. Para obter mais informações sobre o Nessus, consulte o seguinte link:
 
 [Nessus 8.11.x Docs](https://docs.tenable.com/nessus/Content/GettingStarted.htm)
 
-## Requerimentos
+# Requerimentos
 
 - Docker ou Podman ou Docker Slim.
 - Imagem Docker do Debian Slim.
 - Licença de uso do Nessus. Você pode conseguir isso [aqui](https://www.tenable.com/products/nessus/activation-code).
 
-# Suporte ao Docker
+Você pode seguramente inspecionar ou usar minha imagem precompilada ou construir a sua própria.
 
-## Construção
+# Docker
+## Construção:
 
 - Clone este repositório.
 - Execute este comando: `docker image build -t ciromota/nessus-scanner:latest .`
 - Ou descomente a linha 5 no arquivo `docker-compose.yml` para construir e executar.
 
-## Uso
+## Uso:
 
 ```bash
 docker container run -td --name nessus-scanner -p 8834:8834 -v \
@@ -29,24 +30,29 @@ Ou através do docker-compose: `docker-compose up -d`
 
 - Acesse em: `https://localhost:8834`
 
-# Suporte ao Podman
+# Podman
 
 [Podman](https://podman.io/) é uma ferramenta de containers para desenvolvimento, gerenciamento e execução de containers como uma alternativa ao Docker.
 
-## Construção
+## Construção:
 
 - Clone este repositório.
 - Execute este comando: `podman build -t ciromota/nessus-scanner:latest -f .`
+- Ou descomente a linha 5 no arquivo `docker-compose.yml` para construir e executar.
 
-## Uso
+## Uso:
+
+Praticamente igual ao Docker.
 
 ```bash
 podman run -td --name nessus -p 8834:8834 -v \
 /etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
 ```
+Ou através do docker-compose: `docker-compose up -d`
+
 - Acesse em: `https://localhost:8834`
 
-# Suporte ao DockerSlim
+# DockerSlim
 
 [DockerSlim](https://github.com/docker-slim/docker-slim) traz uma nova experiência em gerenciamento de container mantendo o mesmo workflow, produzindo um container menor e seguro.
 
@@ -72,6 +78,25 @@ Em ambos os casos, você pode executar o container da mesma maneira:
 docker container run -td --name nessus -p 8834:8834 -v \
 /etc/localtime:/etc/localtime ciromota/nessus.slim
 ```
+- Acesse em: `https://localhost:8834`
+# nerdctl
+
+nerdctl é uma CLI compatível com Docker para contai**nerd**. Sua sintaxe é basicamente a mesma usada para Docker e Podman por exemplo. Além de não ser necessário root, possui outras funções interessantes, recomendo [conhecê-lo](https://github.com/containerd/nerdctl).
+
+## Construção:
+
+- Clone este repositório.
+- Execute este comando (Precisará ser instalado o BuildKit antes. Consulte documentação.): `nerdctl image build -t ciromota/nessus-scanner:latest .`
+- Ou descomente a linha 5 no arquivo `docker-compose.yml` para construir e executar `nerdctl compose -f docker-compose.yml up -d`.
+
+## Uso:
+
+```bash
+nerdctl run -d --name nessus-scanner -p 8834:8834 -v \
+/etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
+```
+Ou através do docker-compose: `nerdctl compose up -d`
+
 - Acesse em: `https://localhost:8834`
 
 # Official Container
