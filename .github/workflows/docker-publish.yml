@@ -39,9 +39,9 @@ jobs:
 
     - name: docker login
       env:
-        DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
+      run: |
+        echo "${DOCKER_PASSWORD}" | docker login --username "${{env.DOCKER_USERNAME}}" --password-stdin 
       
     - name: Docker Push
       run: docker push ciromota/nessus-scanner:latest    
