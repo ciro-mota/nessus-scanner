@@ -32,11 +32,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-<<<<<<< HEAD
     - uses: actions/checkout@v2
-=======
-    - uses: docker/login-action@v1
->>>>>>> parent of e5d4504 (Update for version 10.1.1 of Nessus.)
 
     - name: Build Docker Image
       run: docker image build . --file Dockerfile --tag ciromota/nessus-scanner:latest
