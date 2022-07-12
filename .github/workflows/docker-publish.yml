@@ -2,8 +2,9 @@ name: Docker Nessus-Scanner CI
 
 on:
   push:
-    paths:
-      - 'Dockerfile'
+    branches: main
+    # paths:
+    #   - 'Dockerfile'
 
 jobs:
   Build:
