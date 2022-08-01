@@ -2,9 +2,8 @@ name: Docker Nessus-Scanner CI
 
 on:
   push:
-    branches: main
-    # paths:
-    #   - 'Dockerfile'
+    paths:
+     - 'Dockerfile'
 
 jobs:
   Build:
@@ -53,6 +52,5 @@ jobs:
       with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ciromota/nessus-scanner:latest
           
