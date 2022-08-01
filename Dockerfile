@@ -1,15 +1,13 @@
-FROM debian:stable-slim
+FROM almalinux:latest
 
 LABEL maintainer="ciromota"
-LABEL version="latest"
 
-ADD https://www.tenable.com/downloads/api/v1/public/pages/nessus/downloads/16870/download?i_agree_to_tenable_license_agreement=true /tmp/nessus.deb
+ADD https://www.tenable.com/downloads/api/v1/public/pages/nessus/downloads/16876/download?i_agree_to_tenable_license_agreement=true /tmp/nessus.rpm
 
-RUN apt-get update -y \
-	&& dpkg -i /tmp/*.deb \
-	&& rm -rf /var/lib/apt/lists/* \
-	&& rm -rf /var/cache/apt/* \
-	&& rm -f /tmp/*.deb
+RUN dnf upgrade -y \
+	&& rpm -i /tmp/*.rpm \
+	&& rm -rf /var/cache/dnf/* \
+	&& rm -f /tmp/*.rpm
 
 EXPOSE 8834
 
