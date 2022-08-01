@@ -4,6 +4,12 @@ on:
   push:
     paths:
      - 'README.md'
+  workflow_dispatch:
+    inputs:
+      input:
+        description: "Manual Update"
+        required: false
+        default: "Manual Update"
 
 jobs:
   Update:
