@@ -4,6 +4,12 @@ on:
   push:
     paths:
      - 'Dockerfile'
+  workflow_dispatch:
+    inputs:
+      input:
+        description: "Manual Test"
+        required: false
+        default: "Manual Test"
 
 jobs:
   Build:
@@ -23,6 +29,16 @@ jobs:
 
     - name: Build Docker Image
       run: docker image build . --file Dockerfile --tag ciromota/nessus-scanner:latest
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+          image-ref: 'ciromota/nessus-scanner:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'  
       
     - name: Docker Container Run
       run: docker container run -td --name nessus-scanner -p 8834:8834 -v /etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
