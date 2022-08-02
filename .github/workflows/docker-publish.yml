@@ -22,6 +22,7 @@ jobs:
       run: docker image build . --file Dockerfile --tag ciromota/nessus-scanner:latest
 
   Test:
+    needs: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -38,7 +39,7 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'  
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
       
     - name: Docker Container Run
       run: docker container run -td --name nessus-scanner -p 8834:8834 -v /etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
