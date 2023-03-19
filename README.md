@@ -10,7 +10,7 @@
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ciro-mota/nessus-scanner?style=for-the-badge)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ciro-mota/nessus-scanner/Docker%20Nessus-Scanner%20CI?style=for-the-badge)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ciro-mota/nessus-scanner/docker-publish.yml?style=for-the-badge)
 ![Docker Image Size](https://img.shields.io/docker/image-size/ciromota/nessus-scanner/latest?style=for-the-badge)
 
 Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnerabilities, configuration issues and more by inspecting hosts over the network. For more information about Nessus, see the following links:
