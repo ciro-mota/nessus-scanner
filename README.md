@@ -17,10 +17,15 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 
 [Nessus 8.11.x Docs](https://docs.tenable.com/nessus/Content/GettingStarted.htm)
 
+## Sponsoring
+
+If you like this work, give me it a star on GitHub, and consider supporting it:
+
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=VUS6R8TX53NTS&no_recurring=0&currency_code=USD)
 ## Requirements for build and use
 
 - Docker, or Podman, or DockerSlim, or Containerd/nerdctl.
-- Debian Slim image Docker.
+- Rocky Linux image Docker.
 - License to use Nessus. You can get it [here](https://www.tenable.com/products/nessus/activation-code).
 
 You can safely inspect and use my already compiled image or build your own based on the instructions.
@@ -29,7 +34,7 @@ You can safely inspect and use my already compiled image or build your own based
 ### Build:
 
 - Clone this repository.
-- Run the command: `docker image build -t ciromota/nessus-scanner:latest .`
+- Run the command: `docker buildx build -t ciromota/nessus-scanner:latest .`
 - Or uncomment line 5 in `docker-compose.yml` for build and run.
 
 ### Usage:
@@ -75,20 +80,20 @@ Consult the documentation and learn about all its functions.
 You can run DockerSlim on top of the previously built image and reduce the size of the Nessus Scanner image without harm, just use the command below:
 
 ```bash
-docker-slim build ciromota/nessus
+docker-slim build ciromota/nessus-scanner
 ```
 
 Or, it is possible with the help of DockerSlim itself to build a new image based on the Dockerfile file contained in this repo. Use the command below:
 
 ```bash
-docker-slim build --dockerfile Dockerfile --show-blogs --tag ciromota/nessus.slim .
+docker-slim build --dockerfile Dockerfile --show-blogs --tag ciromota/nessus-scanner.slim .
 ```
 
 In both cases, you can run the container in the same way:
 
 ```bash
 docker container run -td --name nessus -p 8834:8834 -v \
-/etc/localtime:/etc/localtime ciromota/nessus.slim
+/etc/localtime:/etc/localtime ciromota/nessus-scanner.slim
 ```
 - Access `https://localhost:8834`
 
@@ -99,8 +104,17 @@ nerdctl is a Docker-compatible CLI for contai**nerd**. Its syntax is basically t
 ### Build:
 
 - Clone this repository.
-- Run the command (BuildKit will need to be installed first. See documentation.): `nerdctl image build -t ciromota/nessus-scanner:latest .`
-- Or uncomment line 5 in `docker-compose.yml` for build and run: `nerdctl compose -f docker-compose.yml up -d`.
+- Run the command (BuildKit will need to be installed first. See documentation.):
+
+```bash
+nerdctl image build -t ciromota/nessus-scanner:latest .
+```
+
+- Or uncomment line 5 in `docker-compose.yml` for build and run:
+
+```bash
+nerdctl compose -f docker-compose.yml up -d
+```
 
 ### Usage:
 
@@ -117,9 +131,3 @@ Or through docker-compose: `nerdctl compose up -d`
 Tenable Nessus from version 8.x.x has its official container image.
 
 https://hub.docker.com/r/tenableofficial/nessus
-
-## Sponsoring
-
-If you like this work, give me it a star on GitHub, and consider supporting it:
-
-[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=VUS6R8TX53NTS&no_recurring=0&currency_code=USD)

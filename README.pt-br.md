@@ -20,7 +20,7 @@ O Nessus Scanner da Tenable é um scanner de vulnerabilidades que procura vulner
 ## Requerimentos
 
 - Docker ou Podman ou Docker Slim.
-- Imagem Docker do Debian Slim.
+- Imagem Docker do Rocky Linux.
 - Licença de uso do Nessus. Você pode conseguir isso [aqui](https://www.tenable.com/products/nessus/activation-code).
 
 Você pode seguramente inspecionar ou usar minha imagem precompilada ou construir a sua própria.
@@ -29,7 +29,7 @@ Você pode seguramente inspecionar ou usar minha imagem precompilada ou construi
 ### Construção:
 
 - Clone este repositório.
-- Execute este comando: `docker image build -t ciromota/nessus-scanner:latest .`
+- Execute este comando: `docker buildx build -t ciromota/nessus-scanner:latest .`
 - Ou descomente a linha 5 no arquivo `docker-compose.yml` para construir e executar.
 
 ### Uso:
@@ -75,20 +75,20 @@ Consulte a documentação e conheça todas as suas funções.
 Você pode executar o DockerSlim sobre a imagem criada anteriormente e reduzir o tamanho da imagem do scanner Nessus sem danos, basta usar o comando abaixo:
 
 ```bash
-docker-slim build ciromota/nessus
+docker-slim build ciromota/nessus-scanner
 ```
 
 Ou é possível, com a ajuda do próprio DockerSlim, construir uma nova imagem baseada no arquivo Dockerfile contido neste repo. Use o comando abaixo:
 
 ```bash
-docker-slim build --dockerfile Dockerfile --show-blogs --tag ciromota/nessus.slim .
+docker-slim build --dockerfile Dockerfile --show-blogs --tag ciromota/nessus-scanner.slim .
 ```
 
 Em ambos os casos, você pode executar o container da mesma maneira:
 
 ```bash
 docker container run -td --name nessus -p 8834:8834 -v \
-/etc/localtime:/etc/localtime ciromota/nessus.slim
+/etc/localtime:/etc/localtime ciromota/nessus-scanner.slim
 ```
 - Acesse em: `https://localhost:8834`
 ## nerdctl
@@ -98,8 +98,17 @@ nerdctl é uma CLI compatível com Docker para contai**nerd**. Sua sintaxe é ba
 ### Construção:
 
 - Clone este repositório.
-- Execute este comando (Precisará ser instalado o BuildKit antes. Consulte documentação.): `nerdctl image build -t ciromota/nessus-scanner:latest .`
-- Ou descomente a linha 5 no arquivo `docker-compose.yml` para construir e executar `nerdctl compose -f docker-compose.yml up -d`.
+- Execute este comando (Precisará ser instalado o BuildKit antes. Consulte documentação.):
+
+```bash
+nerdctl image build -t ciromota/nessus-scanner:latest .
+```
+
+- Ou descomente a linha 5 no arquivo `docker-compose.yml` para construir e executar.
+
+```bash
+nerdctl compose -f docker-compose.yml up -d
+```
 
 ### Uso:
 
