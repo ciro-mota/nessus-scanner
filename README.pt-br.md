@@ -7,11 +7,13 @@
 
 <h2>Nessus Essential Scanner (não oficial)</h2>
 
-![License](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)
-![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
-![GitHub last commit](https://img.shields.io/github/last-commit/ciro-mota/nessus-scanner?style=for-the-badge)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ciro-mota/nessus-scanner/docker-publish.yml?style=for-the-badge)
-![Docker Image Size](https://img.shields.io/docker/image-size/ciromota/nessus-scanner/latest?style=for-the-badge)
+<p align="center">
+    <img alt="License" src="https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge">
+    <img alt="Docker" src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ciro-mota/nessus-scanner?style=for-the-badge">
+    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/ciro-mota/nessus-scanner/docker-publish.yml?style=for-the-badge">
+    <img alt="Docker Image Size" src="https://img.shields.io/docker/image-size/ciromota/nessus-scanner/latest?style=for-the-badge">
+</p>
 
 O Nessus Scanner da Tenable é um scanner de vulnerabilidades que procura vulnerabilidades conhecidas, problemas de configuração e muito mais, inspecionando hosts na rede. Para obter mais informações sobre o Nessus, consulte o seguinte link:
 
