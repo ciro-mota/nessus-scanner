@@ -3,7 +3,7 @@ name: Update README in Docker Hub
 on:
   push:
     paths:
-      - "README.md"
+     - 'README.md'
   workflow_dispatch:
     inputs:
       input:
@@ -13,16 +13,17 @@ on:
 
 jobs:
   Update:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
 
-      - name: Docker Hub Description
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ciromota/nessus-scanner
-          readme-filepath: ./README.md
-          short-description: ${{ github.event.repository.description }}
+    - name: Docker Hub Description
+      uses: peter-evans/dockerhub-description@v3
+      with:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: ciromota/nessus-scanner
+        readme-filepath: ./README.md
+        short-description: ${{ github.event.repository.description }}
+        
