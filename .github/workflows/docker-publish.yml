@@ -70,4 +70,11 @@ jobs:
           context: .
           push: true
           tags: ciromota/nessus-scanner:latest
-          
+    
+    - name: Sign image with Cosign
+      uses: sigstore/cosign-installer@v3.1.1
+      run: |
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ghcr.io/ciromota/nessus-scanner:latest
+      env:
+        COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+        COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
