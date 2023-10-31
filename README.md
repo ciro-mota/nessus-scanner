@@ -1,10 +1,3 @@
-</p>
-
-<table align="right">
- <tr><td><a href="https://github.com/ciro-mota/nessus-scanner/blob/main/README.md">:us: English</a></td></tr>
- <tr><td><a href="https://github.com/ciro-mota/nessus-scanner/blob/main/README.pt-br.md">:brazil: Português</a></td></tr>
-</table>
-
 <h2>Unofficial Nessus Essential Scanner</h2>
 
 <p align="center">
@@ -19,12 +12,7 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 
 [Nessus 8.11.x Docs](https://docs.tenable.com/nessus/Content/GettingStarted.htm)
 
-## Sponsoring
-
-If you like this work, give me it a star on GitHub, and consider supporting it:
-
-[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=VUS6R8TX53NTS&no_recurring=0&currency_code=USD)
-## Requirements for build and use
+## 📋 Requirements for build and use
 
 - Docker, or Podman, or DockerSlim, or Containerd/nerdctl.
 - Rocky Linux image Docker.
@@ -32,7 +20,7 @@ If you like this work, give me it a star on GitHub, and consider supporting it:
 
 You can safely inspect and use my already compiled image or build your own based on the instructions.
 
-## Docker
+## 🐳 Docker
 ### Build:
 
 - Clone this repository.
@@ -49,7 +37,7 @@ Or through docker-compose: `docker-compose up -d`.
 
 - Access `https://localhost:8834`
 
-## Podman
+## 🦭 Podman
 
 [Podman](https://podman.io/) is a container engine for developing, managing and executing containers as an alternative to Docker.
 
@@ -71,7 +59,7 @@ Or through docker-compose: `docker-compose up -d`.
 
 - Access `https://localhost:8834`
 
-## DockerSlim
+## ➖ DockerSlim
 
 [DockerSlim](https://github.com/docker-slim/docker-slim) brings a new experience in container management keeping its same workflow, producing a smaller and secure container.
 
@@ -99,7 +87,7 @@ docker container run -td --name nessus -p 8834:8834 -v \
 ```
 - Access `https://localhost:8834`
 
-## nerdctl
+## 🤓 nerdctl
 
 nerdctl is a Docker-compatible CLI for contai**nerd**. Its syntax is basically the same used for Docker and Podman for example. Besides being rootless, it has other interesting functions, I recommend getting to [know it](https://github.com/containerd/nerdctl).
 
@@ -118,7 +106,7 @@ nerdctl image build -t ciromota/nessus-scanner:latest .
 nerdctl compose -f docker-compose.yml up -d
 ```
 
-### Usage:
+### 💻 Usage:
 
 ```bash
 nerdctl run -d --name nessus-scanner -p 8834:8834 -v \
@@ -128,8 +116,14 @@ Or through docker-compose: `nerdctl compose up -d`
 
 - Access `https://localhost:8834`
 
-## Official Container
+## ✔️ Official Container
 
 Tenable Nessus from version 8.x.x has its official container image.
 
 https://hub.docker.com/r/tenableofficial/nessus
+
+## 🎁 Sponsoring
+
+If you like this work, give me it a star on GitHub, and consider supporting it:
+
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=VUS6R8TX53NTS&no_recurring=0&currency_code=USD)
