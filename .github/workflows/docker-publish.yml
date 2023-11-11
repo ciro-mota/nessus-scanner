@@ -66,10 +66,8 @@ jobs:
       uses: docker/metadata-action@v5
       with:
           images: ciromota/nessus-scanner
-      flavor: |
-        latest=auto
-        prefix=
-        suffix=
+          flavor: |
+            latest=true
 
     - name: Build and Push Docker image
       uses: docker/build-push-action@v5
