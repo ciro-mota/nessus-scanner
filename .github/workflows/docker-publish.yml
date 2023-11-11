@@ -4,12 +4,21 @@ on:
   push:
     paths:
      - 'Dockerfile'
+
+run-name: Update for version ${{ github.event.inputs.env }} of Nessus
   workflow_dispatch:
     inputs:
-      input:
-        description: "Manual Test"
-        required: false
-        default: "Manual Test"
+      env:
+        description: 'env'
+        required: true
+        type: choice
+
+  # workflow_dispatch:
+  #   inputs:
+  #     input:
+  #       description: "Manual Trigger"
+  #       required: false
+  #       default: "Manual Trigger"
 
 jobs:
   Build:
@@ -78,9 +87,8 @@ jobs:
 
     - name: Sign image with Cosign
       run: |
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}@${DIGEST}"
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY
       env:
-        TAGS: ${{ steps.docker_meta.outputs.tags }}
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-        DIGEST: ${{ steps.build-and-push.outputs.digest }}
+
