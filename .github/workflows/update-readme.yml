@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       manual_commit_message:
-        description: "Inser manual commit message"
+        description: "Insert manual commit message"
         type: string
         required: true
 
