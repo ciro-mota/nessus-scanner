@@ -1,15 +1,17 @@
 name: Update README in Docker Hub
 
+run-name: ${{ github.event.inputs.manual_commit_message }}
+
 on:
   push:
     paths:
      - 'README.md'
   workflow_dispatch:
     inputs:
-      input:
-        description: "Manual Update"
-        required: false
-        default: "Manual Update"
+      manual_commit_message:
+        description: "Inser manual commit message"
+        type: string
+        required: true
 
 jobs:
   Update:

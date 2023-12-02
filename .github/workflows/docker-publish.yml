@@ -1,15 +1,17 @@
 name: Docker Nessus-Scanner CI
 
+run-name: ${{ github.event.inputs.manual_commit_message }}
+
 on:
   push:
     paths:
      - 'Dockerfile'
   workflow_dispatch:
     inputs:
-      input:
-        description: "Manual Trigger"
-        required: false
-        default: "Manual Trigger"
+      manual_commit_message:
+        description: "Inser manual commit message"
+        type: string
+        required: true
 
 jobs:
   Build:
