@@ -12,6 +12,10 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 
 [Nessus 8.11.x Docs](https://docs.tenable.com/nessus/Content/GettingStarted.htm)
 
+## 💪 Distroless
+
+In this project, only what is essential for running the application is used. Using the image from `gcr.io/distroless/static-debian12`.
+
 ## 📋 Requirements for build and use
 
 - Docker, or Podman, or DockerSlim, or Containerd/nerdctl.
