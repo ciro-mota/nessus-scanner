@@ -21,7 +21,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Build Docker Image
-      run: docker image build . --file Dockerfile --tag ciromota/nessus-scanner:latest
+      run: docker buildx build -t ciromota/nessus-scanner:latest .
 
   Test:
     needs: Build
@@ -31,7 +31,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Build Docker Image
-      run: docker image build . --file Dockerfile --tag ciromota/nessus-scanner:latest
+      run: docker buildx build -t ciromota/nessus-scanner:latest .
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
@@ -43,8 +43,18 @@ jobs:
           vuln-type: 'os,library'
           severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
       
-    - name: Docker Container Run
-      run: docker container run -td --name nessus-scanner -p 8834:8834 -v /etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
+    - name: Container Running and Health Check
+      run: |
+        docker container run -td --name nessus-scanner -p 8834:8834 -v /etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
+        
+        CONTAINER_NAME=$(docker ps -a | awk 'FNR==2{print $1}')
+
+        if docker inspect -f '{{.State.Running}}' "$CONTAINER_NAME" 2>/dev/null | grep -q "true"; then
+            echo "::notice:: All tests OK. :rocket:"
+        else
+            echo "::error:: Failing, reason: Container is not running."
+            exit 1
+        fi
 
   Push:
     needs: Test
