@@ -50,7 +50,7 @@ jobs:
         CONTAINER_NAME=$(docker ps -a | awk 'FNR==2{print $1}')
 
         if docker inspect -f '{{.State.Running}}' "$CONTAINER_NAME" 2>/dev/null | grep -q "true"; then
-            echo "::notice:: All tests OK. :rocket:"
+            echo "::notice:: All tests OK. 🚀"
         else
             echo "::error:: Failing, reason: Container is not running."
             exit 1
