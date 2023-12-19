@@ -10,16 +10,18 @@
 
 Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnerabilities, configuration issues and more by inspecting hosts over the network. For more information about Nessus, see the following links:
 
-[Nessus 8.11.x Docs](https://docs.tenable.com/nessus/Content/GettingStarted.htm)
+▶️ [Nessus Docs](https://docs.tenable.com/nessus/Content/GettingStarted.htm)
+
+> [!WARNING]\
+> The content of this repo is licensed under GPL-3.0 license. You will need to check the Nessus scanner license if you want any other commercial use.
 
 ## 💪 Distroless
 
-In this project, only what is essential for running the application is used. Using the image from `gcr.io/distroless/static-debian12`.
+In this project, only what is essential for running the application is used. Using the image from `gcr.io/distroless/static-debian12` a working image of minimum size will be provisioned.
 
 ## 📋 Requirements for build and use
 
 - Docker, or Podman, or DockerSlim, or Containerd/nerdctl.
-- Rocky Linux image Docker.
 - License to use Nessus. You can get it [here](https://www.tenable.com/products/nessus/activation-code).
 
 You can safely inspect and use my already compiled image or build your own based on the instructions.
@@ -122,7 +124,7 @@ Or through docker-compose: `nerdctl compose up -d`
 
 ## ✔️ Official Container
 
-Tenable Nessus from version 8.x.x has its official container image.
+Tenable Nessus since from version 8.x.x has its official container image.
 
 https://hub.docker.com/r/tenableofficial/nessus
 
