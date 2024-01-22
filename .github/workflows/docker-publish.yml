@@ -24,8 +24,13 @@ jobs:
       run: docker buildx build -t ciromota/nessus-scanner:latest .
 
   Test:
-    needs: Build
     runs-on: ubuntu-22.04
+    needs: Build
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+      security-events: write
 
     steps:
     - uses: actions/checkout@v4
@@ -36,13 +41,19 @@ jobs:
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-          image-ref: 'ciromota/nessus-scanner:latest'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+        image-ref: 'ciromota/nessus-scanner:latest'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
       
+    - name: Push trivy results
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+
     - name: Container Running and Health Check
       run: |
         docker container run -td --name nessus-scanner -p 8834:8834 -v /etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
