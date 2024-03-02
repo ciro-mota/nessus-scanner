@@ -112,7 +112,7 @@ nerdctl image build -t ciromota/nessus-scanner:latest .
 nerdctl compose -f docker-compose.yml up -d
 ```
 
-### 💻 Usage:
+### Usage:
 
 ```bash
 nerdctl run -d --name nessus-scanner -p 8834:8834 -v \
