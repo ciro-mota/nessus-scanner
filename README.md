@@ -8,12 +8,12 @@
     <img alt="Docker Image Size" src="https://img.shields.io/docker/image-size/ciromota/nessus-scanner/latest?style=for-the-badge">
 </p>
 
-Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnerabilities, configuration issues and more by inspecting hosts over the network. For more information about Nessus, see the following links:
+Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnerabilities, configuration issues and more by inspecting hosts over the network. For more information about Nessus, see the following link:
 
 ▶️ [Nessus Docs](https://docs.tenable.com/nessus/Content/GettingStarted.htm)
 
 > [!WARNING]\
-> The content of this repo is licensed under GPL-3.0 license. You will need to check the Nessus scanner license if you want any other commercial use.
+> The content of **this repo*** is licensed under GPL-3.0 license. You will need to check the Nessus scanner license if you want any other commercial use.
 
 ## 💪 Distroless
 
@@ -21,10 +21,10 @@ In this project, only what is essential for running the application is used. Usi
 
 ## 📋 Requirements for build and use
 
-- Docker, or Podman, or DockerSlim, or Containerd/nerdctl.
+- Docker, Podman, DockerSlim or Containerd/nerdctl.
 - License to use Nessus. You can get it [here](https://www.tenable.com/products/nessus/activation-code).
 
-You can safely inspect and use my already compiled image or build your own based on the instructions.
+You can safely inspect and use [my already compiled image](https://hub.docker.com/r/ciromota/nessus-scanner) or build your own based on the instructions below.
 
 ## 🐳 Docker
 ### Build:
@@ -124,12 +124,12 @@ Or through docker-compose: `nerdctl compose up -d`
 
 ## ✔️ Official Container
 
-Tenable Nessus since from version 8.x.x has its official container image.
+Tenable Nessus since from version 8.x.x has its official container image if you wish to use an image from the developer himself.
 
-https://hub.docker.com/r/tenableofficial/nessus
+▶️ https://hub.docker.com/r/tenableofficial/nessus
 
 ## 🎁 Sponsoring
 
-If you like this work, give me it a star on GitHub, and consider supporting it:
+If you like this work, **please** give me it a star here on GitHub and consider supporting it:
 
 [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=VUS6R8TX53NTS&no_recurring=0&currency_code=USD)
