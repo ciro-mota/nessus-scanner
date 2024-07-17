@@ -17,7 +17,14 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 
 ## 💪 Distroless
 
-In this project, only what is essential for running the application is used. Using the image from `gcr.io/distroless/base-debian12` a working image of minimum size will be provisioned.
+In this project, only what is essential for running the application is used. Now we using the image from `cgr.dev/chainguard/wolfi-base` with zero CVE's and a working image of minimum size will be provisioned. See below the before and after.
+
+<details>
+  <summary>Click to expand</summary>
+
+![Before image using Debian Distroless image](imgs/before.png)
+![After image using Wolfi-base image](imgs/after.png)
+</details>
 
 ## 📋 Requirements for build and use
 
