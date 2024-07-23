@@ -1,0 +1,60 @@
+default:
+  image: docker:24.0.9
+  services:
+    - docker:24.0.9-dind
+
+include:
+  - template: Jobs/Container-Scanning.gitlab-ci.yml
+
+stages:
+  - build
+  - lint
+  - test
+  - scan
+  - deploy
+  - sign
+
+Build:
+  stage: build
+  script:
+      - docker buildx build -t ciromota/nessus-scanner:latest .
+
+Lint:
+    stage: lint
+    needs: ["Build"]
+    image: hadolint/hadolint:latest-debian
+    script:
+        - hadolint Dockerfile
+
+Test:
+    stage: test
+    needs: ["Lint"]
+    script:
+        - docker container run -td --name nessus-scanner -p 8834:8834 ciromota/nessus-scanner:latest
+
+container_scanning:
+    stage: scan
+    needs: ["Test"]
+    variables:
+      CS_IMAGE: ciromota/nessus-scanner:latest
+
+# Push:
+#     stage: deploy
+#     needs: ["container_scanning"]
+#     before_script:
+#       - echo $DOCKERHUB_TOKEN | docker login docker.io -u $DOCKER_USER --password-stdin
+#     script:
+#       - docker buildx build -t ciromota/nessus-scanner:latest .
+#       - docker push ciromota/nessus-scanner:latest
+
+# Sign:
+#   stage: sign
+#   needs: ["Push"]
+#   image:
+#     name: gcr.io/projectsigstore/cosign:v2.2.4
+#     entrypoint: [""]
+#   before_script:
+#     - echo $DOCKERHUB_TOKEN | cosign login docker.io -u $DOCKER_USER --password-stdin
+#   script:
+#     - cosign sign --yes --key env://COSIGN_PRIVATE_KEY ciromota/nessus-scanner:latest
+    
