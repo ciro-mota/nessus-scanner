@@ -13,7 +13,7 @@ Tenable's Nessus Scanner is a vulnerability scanner that looks for known vulnera
 ▶️ [Nessus Docs](https://docs.tenable.com/nessus/Content/GettingStarted.htm)
 
 > [!WARNING]\
-> The content of **this repo*** is licensed under GPL-3.0 license. You will need to check the Nessus scanner license if you want any other commercial use.
+> The content of **this repo** is licensed under GPL-3.0 license. You will need to check the [Nessus](https://static.tenable.com/prod_docs/Tenable-Master-Agreement-Template-v6-(2.2023)-CLICK.pdf) scanner license if you want any other commercial use.
 
 ## 💪 Distroless
 
