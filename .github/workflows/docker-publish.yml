@@ -107,11 +107,10 @@ jobs:
           tags: ciromota/nessus-scanner:latest
 
     - name: Sign image with Cosign
-      run: |
-
-          CONTAINER_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ciromota/nessus-scanner:latest)
-
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ciromota/nessus-scanner:${{ CONTAINER_DIGEST }}
+      run: | 
+        CONTAINER_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ciromota/nessus-scanner:latest)
+        
+        cosign sign --yes --key env://COSIGN_PRIVATE_KEY ciromota/nessus-scanner:${{ CONTAINER_DIGEST }}
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
