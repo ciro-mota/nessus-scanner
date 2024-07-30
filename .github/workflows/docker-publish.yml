@@ -112,4 +112,4 @@ jobs:
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-        CONTAINER_DIGEST: $(docker inspect --format='{{index .RepoDigests 0}}' ciromota/nessus-scanner:latest)
+        CONTAINER_DIGEST: ${{ steps.build-and-push.outputs.digest }}
