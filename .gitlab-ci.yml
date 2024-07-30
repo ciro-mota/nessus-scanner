@@ -10,9 +10,9 @@ stages:
   - build
   - lint
   - test
-  - scan
   - deploy
   - sign
+  - scan
 
 Build:
   stage: build
@@ -29,18 +29,14 @@ Lint:
 Test:
     stage: test
     needs: ["Lint"]
+    before_script:
+        - docker buildx build -t ciromota/nessus-scanner:latest .
     script:
         - docker container run -td --name nessus-scanner -p 8834:8834 ciromota/nessus-scanner:latest
 
-container_scanning:
-    stage: scan
-    needs: ["Test"]
-    variables:
-      CS_IMAGE: ciromota/nessus-scanner:latest
-
 # Push:
 #     stage: deploy
-#     needs: ["container_scanning"]
+#     needs: ["Test"]
 #     before_script:
 #       - echo $DOCKERHUB_TOKEN | docker login docker.io -u $DOCKER_USER --password-stdin
 #     script:
@@ -51,10 +47,18 @@ container_scanning:
 #   stage: sign
 #   needs: ["Push"]
 #   image:
-#     name: gcr.io/projectsigstore/cosign:v2.2.4
+#     name: gcr.io/projectsigstore/cosign:v2.2.4-dev
 #     entrypoint: [""]
 #   before_script:
 #     - echo $DOCKERHUB_TOKEN | cosign login docker.io -u $DOCKER_USER --password-stdin
 #   script:
 #     - cosign sign --yes --key env://COSIGN_PRIVATE_KEY ciromota/nessus-scanner:latest
+
+#container_scanning:
+#    stage: scan
+#    needs: ["Sign"]
+#    variables:
+#      CS_IMAGE: ciromota/nessus-scanner:latest
+#      GIT_STRATEGY: fetch
+#      CS_SEVERITY_THRESHOLD: Low
     
