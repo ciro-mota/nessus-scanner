@@ -108,7 +108,10 @@ jobs:
 
     - name: Sign image with Cosign
       run: |
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ciromota/nessus-scanner:latest
+
+          digest=$(docker inspect --format='{{index .RepoDigests 0}}' ciromota/nessus-scanner:latest)
+
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ciromota/nessus-scanner:${{ digest }}
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
