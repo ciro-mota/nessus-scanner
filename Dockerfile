@@ -1,7 +1,7 @@
 FROM debian:stable-slim as base
 LABEL maintainer="ciromota"
 
-ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.8.0-debian10_amd64.deb /tmp/nessus.deb
+ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.8.1-debian10_amd64.deb /tmp/nessus.deb
 
 RUN dpkg -i /tmp/*.deb
 
