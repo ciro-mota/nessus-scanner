@@ -110,5 +110,5 @@ jobs:
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-      run: cosign sign --yes --key env://COSIGN_PRIVATE_KEY ciromota/nessus-scanner:${{ steps.build-and-push.outputs.digest }}
+      run: cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ steps.digest.outputs.image_sha }}
 
