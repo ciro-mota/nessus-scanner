@@ -104,7 +104,7 @@ jobs:
       with:
           context: .
           push: true
-          tags: ${{ steps.docker_meta.outputs.tags }}
+          tags: ciromota/nessus-scanner:latest
 
     - name: Sign image with Cosign
       env:
