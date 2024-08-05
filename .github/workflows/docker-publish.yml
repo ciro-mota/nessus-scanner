@@ -92,19 +92,21 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Extract metadata for Docker
-      id: meta
+      id: docker_meta
       uses: docker/metadata-action@v5
       with:
           images: ciromota/nessus-scanner
+          tags: type=sha,format=long
           flavor: |
             latest=true
 
     - name: Build and Push Docker image
       uses: docker/build-push-action@v5
+      id: build-and-push
       with:
           context: .
           push: true
-          tags: ciromota/nessus-scanner:latest
+          tags: ${{ steps.docker_meta.outputs.tags }}
 
     - name: Sign image with Cosign
       env:
