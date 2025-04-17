@@ -1,7 +1,7 @@
 default:
-  image: docker:27.1.1
+  image: docker:28
   services:
-    - docker:27.1.1-dind
+    - docker:28-dind
 
 stages:
   - build
@@ -30,9 +30,9 @@ Test:
 
 container_scanning:
   stage: scan
-  image: docker:27.1.1
+  image: docker:28
   services:
-    - name: docker:27.1.1-dind
+    - name: docker:28-dind
       entrypoint: ["env", "-u", "DOCKER_HOST"]
       command: ["dockerd-entrypoint.sh"]
   variables:
@@ -58,9 +58,9 @@ container_scanning:
 
 # push_and_sign:
 #   stage: deploy
-#   image: docker:27.1.1
+#   image: docker:28
 #   services:
-#     - docker:27.1.1-dind
+#     - docker:28-dind
 #   variables:
 #     COSIGN_YES: "true"
 #   id_tokens:
