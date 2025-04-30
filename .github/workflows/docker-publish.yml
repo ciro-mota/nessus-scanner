@@ -1,4 +1,9 @@
 name: Docker Nessus-Scanner CI
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+  security-events: write
 
 run-name: ${{ github.event.inputs.manual_commit_message }}
 
@@ -26,11 +31,6 @@ jobs:
   Test:
     runs-on: ubuntu-24.04
     needs: Build
-    permissions:
-      contents: read
-      id-token: write
-      packages: write
-      security-events: write
 
     steps:
     - uses: actions/checkout@v4
@@ -120,4 +120,3 @@ jobs:
             images+="${tag}@${DIGEST} "
           done
           cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${images}
-
