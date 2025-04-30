@@ -1,5 +1,9 @@
 name: Update README in Docker Hub
 
+permissions:
+  contents: read
+  id-token: write
+
 run-name: ${{ github.event.inputs.manual_commit_message }}
 
 on:

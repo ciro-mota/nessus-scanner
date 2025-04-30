@@ -1,4 +1,5 @@
 name: Docker Nessus-Scanner CI
+
 permissions:
   contents: read
   id-token: write
