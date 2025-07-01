@@ -1,7 +1,6 @@
 FROM debian:stable-slim as base
-LABEL maintainer="ciromota"
 
-ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.8.4-debian10_amd64.deb /tmp/nessus.deb
+ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.9.0-debian10_amd64.deb /tmp/nessus.deb
 
 RUN dpkg -i /tmp/*.deb
 
@@ -9,9 +8,16 @@ RUN dpkg -i /tmp/*.deb
 # hadolint ignore=DL3006
 FROM cgr.dev/chainguard/wolfi-base as nessus-distroless
 
+LABEL org.opencontainers.image.title="Nessus Essentials Container"
+LABEL org.opencontainers.image.description="Nessus Essentials Container with Distroless support."
+LABEL org.opencontainers.image.authors="Ciro Mota <github.com/ciro-mota> (@ciro-mota)"
+LABEL org.opencontainers.image.url="https://github.com/ciro-mota/nessus-scanner"
+LABEL org.opencontainers.image.documentation="https://github.com/ciro-mota/nessus-scanner#README.md"
+LABEL org.opencontainers.image.source="https://github.com/ciro-mota/nessus-scanner"
+
 COPY --from=base /opt /opt
 
-RUN apk add libgcc=14.2.0-r12 libstdc++=14.2.0-r12 --no-cache
+RUN apk add libgcc=15.1.0-r1 libstdc++=15.1.0-r1 --no-cache
 
 EXPOSE 8834
 
