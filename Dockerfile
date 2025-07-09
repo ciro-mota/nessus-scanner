@@ -1,12 +1,12 @@
-FROM debian:stable-slim as base
+FROM debian:stable-slim AS base
 
-ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.9.0-debian10_amd64.deb /tmp/nessus.deb
+ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.9.1-debian10_amd64.deb /tmp/nessus.deb
 
 RUN dpkg -i /tmp/*.deb
 
 # hadolint ignore=DL3007
 # hadolint ignore=DL3006
-FROM cgr.dev/chainguard/wolfi-base as nessus-distroless
+FROM cgr.dev/chainguard/wolfi-base AS nessus-distroless
 
 LABEL org.opencontainers.image.title="Nessus Essentials Container"
 LABEL org.opencontainers.image.description="Nessus Essentials Container with Distroless support."
