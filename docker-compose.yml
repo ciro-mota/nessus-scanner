@@ -1,9 +1,11 @@
+version: '3.8'
+
 services:
   nessus:
-    image: "ciromota/nessus-scanner:latest"
+    image: ciromota/nessus-scanner:latest
 #    build: .
     ports:
       - "8834:8834"
     volumes:
        - /etc/localtime:/etc/localtime
-    restart: on-failure   
+    restart: on-failure
