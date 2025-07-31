@@ -46,10 +46,6 @@ jobs:
     - name: Build Docker Image
       run: docker buildx build -t ciromota/nessus-scanner:latest .
 
-    - name: Install Grype CLI
-      run: |
-        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
-
     - name: Run Grype vulnerability scanner
       id: scan
       uses: anchore/scan-action@v6
@@ -59,17 +55,19 @@ jobs:
         severity-cutoff: critical
         output-format: table
 
-    - name: Publish Scan Summary into GITHUB_STEP_SUMMARY
-      run: |
-        echo "## Grype Vulnerability Scan Summary" >> $GITHUB_STEP_SUMMARY
-        echo '```' >> $GITHUB_STEP_SUMMARY
-        grype docker:ciromota/nessus-scanner:latest -o table >> $GITHUB_STEP_SUMMARY
-        echo '```' >> $GITHUB_STEP_SUMMARY
-
     - name: Upload Grype report
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: ${{ steps.scan.outputs.sarif }}
+
+    - name: Publish Scan Summary into GITHUB_STEP_SUMMARY
+      run: |
+        set -e
+        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+        echo "## Grype Vulnerability Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        grype docker:ciromota/nessus-scanner:latest -o table >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
 
     - name: Container Running and Health Check
       run: |
