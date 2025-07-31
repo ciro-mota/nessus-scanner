@@ -46,21 +46,30 @@ jobs:
     - name: Build Docker Image
       run: docker buildx build -t ciromota/nessus-scanner:latest .
 
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
+    - name: Install Grype CLI
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+    - name: Run Grype vulnerability scanner
+      id: scan
+      uses: anchore/scan-action@v6
       with:
-        image-ref: 'ciromota/nessus-scanner:latest'
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-        exit-code: '1'
-        ignore-unfixed: true
-        vuln-type: 'os,library'
-        severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-      
-    - name: Push trivy results
+        image: ciromota/nessus-scanner:latest
+        fail-build: true
+        severity-cutoff: critical
+        output-format: table
+
+    - name: Publish Scan Summary into GITHUB_STEP_SUMMARY
+      run: |
+        echo "## Grype Vulnerability Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        grype docker:ciromota/nessus-scanner:latest -o table >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+
+    - name: Upload Grype report
       uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: 'trivy-results.sarif'
+        sarif_file: ${{ steps.scan.outputs.sarif }}
 
     - name: Container Running and Health Check
       run: |
@@ -103,6 +112,8 @@ jobs:
 
     - name: Build and Push Docker image
       uses: docker/build-push-action@v6
+      env:
+        DOCKER_BUILD_SUMMARY: false
       id: build-and-push
       with:
           context: .
