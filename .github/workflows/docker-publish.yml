@@ -53,7 +53,7 @@ jobs:
         image: ciromota/nessus-scanner:latest
         fail-build: true
         severity-cutoff: critical
-        output-format: table,sarif
+        output-format: sarif
 
     - name: Upload Grype report
       uses: github/codeql-action/upload-sarif@v3
