@@ -1,6 +1,6 @@
 FROM debian:stable-slim AS base
 
-ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.9.2-debian10_amd64.deb /tmp/nessus.deb
+ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.9.3-debian10_amd64.deb /tmp/nessus.deb
 
 RUN dpkg -i /tmp/*.deb
 
