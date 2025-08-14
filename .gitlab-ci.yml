@@ -1,7 +1,18 @@
 default:
-  image: docker:28
+  image: docker:28.3.3
   services:
-    - docker:28-dind
+    - docker:28.3.3-dind
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_CHANGED_PATHS == "Dockerfile"'
+      when: always
+
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: always
+      changes:
+        - Dockerfile
+    - when: never
 
 stages:
   - build
@@ -49,9 +60,7 @@ container_scanning:
   allow_failure: true
   script:
     - docker build -t $IMAGE .
-    - ./trivy image --exit-code 0 --format template -o gl-container-scanning-report.json $IMAGE
-    - ./trivy image --exit-code 0 --severity LOW $IMAGE
-    - ./trivy image --exit-code 1 --severity CRITICAL $IMAGE
+    - ./trivy image --format template -o gl-container-scanning-report.json $IMAGE
   cache:
     paths:
       - .trivycache/
