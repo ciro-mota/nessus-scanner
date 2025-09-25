@@ -54,7 +54,6 @@ jobs:
         fail-build: false
         severity-cutoff: critical
         output-format: sarif
-        sarif-output: grype-results.sarif
 
     - name: Install Grype CLI to generate GITHUB_STEP_SUMMARY
       run: |
