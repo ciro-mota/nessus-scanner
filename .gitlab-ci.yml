@@ -1,7 +1,7 @@
 default:
-  image: docker:28.3.3
+  image: docker:28.4.0
   services:
-    - docker:28.3.3-dind
+    - docker:28.4.0-dind
 
 workflow:
   rules:
@@ -39,37 +39,33 @@ Test:
     script:
         - docker container run -td --name nessus-scanner -p 8834:8834 ciromota/nessus-scanner:latest
 
+cache:
+  key: reports
+  paths:
+  - ${CI_PROJECT_DIR}/gl-container-scanning-report.json
+
 container_scanning:
   stage: scan
-  image: docker:28
+  image: docker:28.4.0
   services:
-    - name: docker:28-dind
-      entrypoint: ["env", "-u", "DOCKER_HOST"]
-      command: ["dockerd-entrypoint.sh"]
+    - docker:28.4.0-dind
   variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
-    IMAGE: trivy-ci-test:$CI_COMMIT_SHA
-    TRIVY_NO_PROGRESS: "true"
-    TRIVY_CACHE_DIR: ".trivycache/"
-  before_script:
-    - export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-    - echo $TRIVY_VERSION
-    - wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
-  allow_failure: true
   script:
-    - docker build -t $IMAGE .
-    - ./trivy image --format template -o gl-container-scanning-report.json $IMAGE
-  cache:
-    paths:
-      - .trivycache/
+    - wget --no-verbose https://raw.githubusercontent.com/anchore/grype/main/install.sh -O - | sh -s -- -b /usr/local/bin
+    - docker build -t my-image:$CI_COMMIT_SHA .
+    - grype my-image:$CI_COMMIT_SHA -o template --template $CI_PROJECT_DIR/grype_gitlab.tpl --scope all-layers > $CI_PROJECT_DIR/gl-container-scanning-report.json
+    - cat $CI_PROJECT_DIR/gl-container-scanning-report.json
+  artifacts:
+    reports:
+      container_scanning: $CI_PROJECT_DIR/gl-container-scanning-report.json
 
 # push_and_sign:
 #   stage: deploy
-#   image: docker:28
+#   image: docker:28.4.0
 #   services:
-#     - docker:28-dind
+#     - docker:28.4.0-dind
 #   variables:
 #     COSIGN_YES: "true"
 #   id_tokens:
