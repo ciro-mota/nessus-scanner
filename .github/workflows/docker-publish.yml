@@ -6,7 +6,7 @@ permissions:
   packages: write
   security-events: write
 
-run-name: ${{ github.event.inputs.manual_commit_message || format('Triggered by Dockerfile change: {0}', github.event.head_commit.message) }}
+run-name: ${{ github.event.inputs.manual_commit_message || github.event.head_commit.message }}
 
 on:
   push:
