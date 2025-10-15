@@ -39,11 +39,6 @@ Test:
     script:
         - docker container run -td --name nessus-scanner -p 8834:8834 ciromota/nessus-scanner:latest
 
-cache:
-  key: reports
-  paths:
-  - ${CI_PROJECT_DIR}/gl-container-scanning-report.json
-
 container_scanning:
   stage: scan
   image: docker:28.4.0
@@ -52,14 +47,22 @@ container_scanning:
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
-  script:
+  before_script:
     - wget --no-verbose https://raw.githubusercontent.com/anchore/grype/main/install.sh -O - | sh -s -- -b /usr/local/bin
-    - docker build -t my-image:$CI_COMMIT_SHA .
-    - grype my-image:$CI_COMMIT_SHA -o template --template $CI_PROJECT_DIR/grype_gitlab.tpl --scope all-layers > $CI_PROJECT_DIR/gl-container-scanning-report.json
-    - cat $CI_PROJECT_DIR/gl-container-scanning-report.json
+  script:
+    - docker build -t ciromota/nessus-scanner:$CI_COMMIT_SHA .
+    - |
+      grype ciromota/nessus-scanner:$CI_COMMIT_SHA \
+        -o template \
+        -t ./grype_gitlab.tpl \
+        --scope all-layers \
+        > gl-container-scanning-report.json
   artifacts:
+    when: always
     reports:
-      container_scanning: $CI_PROJECT_DIR/gl-container-scanning-report.json
+      container_scanning: gl-container-scanning-report.json
+    paths:
+      - gl-container-scanning-report.json
 
 # push_and_sign:
 #   stage: deploy
