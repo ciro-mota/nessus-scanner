@@ -1,54 +1,32 @@
-{{- $image := .Source.Target.UserInput }}
+{{- $image := .Source.Target.UserInput -}}
 {
+  "version": "15.0.0",
   "vulnerabilities": [
   {{- $t_first := true }}
-  {{- range $i, $_ := .Matches }}
+  {{- range .Matches }}
     {{- if $t_first -}}
       {{- $t_first = false -}}
     {{ else -}}
       ,
     {{- end }}
     {{- $fixedInVersion := "" -}}
-    {{- if ge (len .Vulnerability.Fix.Versions) 1 -}}{{- $fixedInVersion = index .Vulnerability.Fix.Versions 0 -}}{{- end -}}
+    {{- if ge (len .Vulnerability.Fix.Versions) 1 -}}{{- $fixedInVersion = index .Vulnerability.Fix.Versions 0 -}}{{- end }}
     {
-      "language": "{{ .Artifact.Language }}",
-      "category": "container_scanning",
-      "message": "{{ .Vulnerability.ID }} in {{ .Artifact.Name }}-{{ .Artifact.Version }}",
+      "id": "{{ .Vulnerability.ID }}",
+      "name": "{{ .Vulnerability.ID }}",
       "description": {{ .Vulnerability.Description | printf "%q" }},
-      "cve": "{{ .Vulnerability.ID }}",
       "severity": {{ if eq .Vulnerability.Severity "Negligible" -}}
-                    "Low" {{- /* Since GitLab lacks a 'negligible' severity, 'Low' was the closest value in meaning. */ -}}
+                    "Low"
+                  {{- else if eq .Vulnerability.Severity "Unknown" -}}
+                    "Unknown"
                   {{- else -}}
                     "{{ .Vulnerability.Severity }}"
                   {{- end }},
-      "confidence": "Unknown",
-      "remediateMetadata": {{ if not $fixedInVersion -}} {} {{- else -}}
-      {
-        "package_name": "{{ .Artifact.Name }}",
-        "package_version": "{{ .Artifact.Version }}",
-        "fixed_version": "{{ $fixedInVersion }}",
-        "summary": "Upgrade {{ .Artifact.Name }} to {{ $fixedInVersion }}"
-      }
-      {{- end }},
       "solution": {{ if $fixedInVersion -}}
-                    "Upgrade {{ .Artifact.Name }} to {{ $fixedInVersion }}"
+                    "Upgrade {{ .Artifact.Name }} to version {{ $fixedInVersion }}"
                   {{- else -}}
                     "No solution provided"
                   {{- end }},
-      "scanner": {
-        "id": "grype",
-        "name": "grype"
-      },
-      "location": {
-        "dependency": {
-          "package": {
-            "name": "{{ .Artifact.Name }}"
-          },
-          "version": "{{ .Artifact.Version }}"
-        },
-        "operating_system": "{{ .Vulnerability.Namespace }}",
-        "image": "{{ $image }}"
-      },
       "identifiers": [
         {{- if eq (substr 0 3 .Vulnerability.ID) "CVE" }}
         {
@@ -64,30 +42,38 @@
           "value": "{{ .Vulnerability.ID }}",
           "url": "https://github.com/advisories/{{ .Vulnerability.ID }}"
         }
-        {{- else if eq (substr 0 4 .Vulnerability.ID) "ALAS" }}
+        {{- else }}
         {
-          "type": "alas",
+          "type": "other",
           "name": "{{ .Vulnerability.ID }}",
-          "value": "{{ .Vulnerability.ID }}",
-          "url": "https://alas.aws.amazon.com/AL2/{{ .Vulnerability.ID }}.html"
-        }
-        {{- else if eq (substr 0 4 .Vulnerability.ID) "ELSA" }}
-        {
-          "type": "elsa",
-          "name": "{{ .Vulnerability.ID }}",
-          "value": "{{ .Vulnerability.ID }}",
-          "url": "https://linux.oracle.com/errata/{{ .Vulnerability.ID }}.html"
+          "value": "{{ .Vulnerability.ID }}"
         }
         {{- end }}
       ],
       "links": [
-        {{- $lastIndexOfURLs := getLastIndex .Vulnerability.URLs}}
-        {{- range $j, $_ := .Vulnerability.URLs }}
+        {{- $lastIndexOfURLs := getLastIndex .Vulnerability.URLs -}}
+        {{- if gt (len .Vulnerability.URLs) 0 -}}
+        {{- range $j, $url := .Vulnerability.URLs }}
         {
-          "url": "{{ . }}"
+          "url": "{{ $url }}"
         }{{if ne $lastIndexOfURLs $j}},{{end}}
+        {{- end -}}
+        {{- else }}
+        {
+          "url": ""
+        }
         {{- end }}
-      ]
+      ],
+      "location": {
+        "dependency": {
+          "package": {
+            "name": "{{ .Artifact.Name }}"
+          },
+          "version": "{{ .Artifact.Version }}"
+        },
+        "operating_system": "{{ .Artifact.Type }}",
+        "image": "{{ $image }}"
+      }
     }
   {{- end }}
   ],
@@ -98,20 +84,13 @@
       "name": "Grype",
       "url": "https://github.com/anchore/grype",
       "vendor": {
-        "name": "GitLab"
+        "name": "Anchore"
       },
-      "version": "0.34.3"
-    },
-    "analyzer": {
-      "id": "gcs",
-      "name": "GitLab Container Scanning",
-      "vendor": {
-        "name": "GitLab"
-      }
+      "version": "{{ .Descriptor.Version }}"
     },
     "type": "container_scanning",
-    "start_time": "",
-    "end_time": "",
+    "start_time": "{{ .Descriptor.Timestamp }}",
+    "end_time": "{{ .Descriptor.Timestamp }}",
     "status": "success"
   }
 }
