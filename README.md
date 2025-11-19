@@ -133,9 +133,3 @@ Or through docker-compose: `nerdctl compose up -d`
 Tenable Nessus since from version 8.x.x has its official container image if you wish to use an image from the developer himself.
 
 ▶️ https://hub.docker.com/r/tenableofficial/nessus
-
-## 🎁 Sponsoring
-
-If you like this work, **please** give me it a star here on GitHub and consider supporting it:
-
-[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=VUS6R8TX53NTS&no_recurring=0&currency_code=USD)
