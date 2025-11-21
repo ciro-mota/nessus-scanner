@@ -1,8 +1,8 @@
 default:
-  image: docker:29.0.2
+  image: docker:28.4.0
 
 services:
-  - docker:29.0.2-dind
+  - docker:28.4.0-dind
 
 workflow:
   rules:
@@ -31,7 +31,7 @@ stages:
 Build:
   stage: build
   script:
-    - docker build -t $IMAGE_TAG .
+    - docker build --cache-from ciromota/nessus-scanner:latest -t $IMAGE_TAG .
     - docker tag $IMAGE_TAG ciromota/nessus-scanner:latest
 
 Lint:
@@ -42,22 +42,25 @@ Lint:
 
 Test:
   stage: test
-  needs: ["Build"]
+  before_script:
+    - docker build --cache-from ciromota/nessus-scanner:latest -t $IMAGE_TAG .
   script:
     - docker container run -td --name nessus-scanner -p 8834:8834 $IMAGE_TAG
+    - sleep 5
+    - docker ps | grep nessus-scanner
   after_script:
     - docker stop nessus-scanner || true
     - docker rm nessus-scanner || true
 
 container_scanning:
   stage: scan
-  needs: ["Build"]
   variables:
     CS_IMAGE: $IMAGE_TAG
   before_script:
     - apk add --no-cache wget
     - wget -qO- https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
   script:
+    - docker build --cache-from ciromota/nessus-scanner:latest -t $IMAGE_TAG .
     - grype $IMAGE_TAG -o template -t grype_gitlab.tpl --scope all-layers > gl-container-scanning-report.json
   artifacts:
     when: always
@@ -70,9 +73,9 @@ container_scanning:
 
 # push_and_sign:
 #   stage: deploy
-#   image: docker:29.0.2
+#   image: docker:28.4.0
 #   services:
-#     - docker:29.0.2-dind
+#     - docker:28.4.0-dind
 #   variables:
 #     COSIGN_YES: "true"
 #   id_tokens:
