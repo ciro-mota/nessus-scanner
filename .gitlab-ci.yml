@@ -1,18 +1,25 @@
 default:
-  image: docker:28.4.0
-  services:
-    - docker:28.4.0-dind
+  image: docker:29.0.2
+
+services:
+  - docker:29.0.2-dind
 
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_CHANGED_PATHS == "Dockerfile"'
       when: always
-
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_PIPELINE_SOURCE == "push"'
       when: always
       changes:
         - Dockerfile
     - when: never
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+  IMAGE_TAG: ciromota/nessus-scanner:$CI_COMMIT_SHA
 
 stages:
   - build
@@ -24,51 +31,48 @@ stages:
 Build:
   stage: build
   script:
-      - docker buildx build -t ciromota/nessus-scanner:latest .
+    - docker build -t $IMAGE_TAG .
+    - docker tag $IMAGE_TAG ciromota/nessus-scanner:latest
 
 Lint:
-    stage: lint
-    image: hadolint/hadolint:latest-debian
-    script:
-        - hadolint Dockerfile
+  stage: lint
+  image: hadolint/hadolint:latest-debian
+  script:
+    - hadolint Dockerfile
 
 Test:
-    stage: test
-    before_script:
-        - docker buildx build -t ciromota/nessus-scanner:latest .
-    script:
-        - docker container run -td --name nessus-scanner -p 8834:8834 ciromota/nessus-scanner:latest
+  stage: test
+  needs: ["Build"]
+  script:
+    - docker container run -td --name nessus-scanner -p 8834:8834 $IMAGE_TAG
+  after_script:
+    - docker stop nessus-scanner || true
+    - docker rm nessus-scanner || true
 
 container_scanning:
   stage: scan
-  image: docker:28.4.0
-  services:
-    - docker:28.4.0-dind
+  needs: ["Build"]
   variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
+    CS_IMAGE: $IMAGE_TAG
   before_script:
-    - wget --no-verbose https://raw.githubusercontent.com/anchore/grype/main/install.sh -O - | sh -s -- -b /usr/local/bin
+    - apk add --no-cache wget
+    - wget -qO- https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
   script:
-    - docker build -t ciromota/nessus-scanner:$CI_COMMIT_SHA .
-    - |
-      grype ciromota/nessus-scanner:$CI_COMMIT_SHA \
-        -o template \
-        -t ./grype_gitlab.tpl \
-        --scope all-layers \
-        > gl-container-scanning-report.json
+    - grype $IMAGE_TAG -o template -t grype_gitlab.tpl --scope all-layers > gl-container-scanning-report.json
   artifacts:
     when: always
     reports:
       container_scanning: gl-container-scanning-report.json
     paths:
       - gl-container-scanning-report.json
+    expire_in: 30 days
+  allow_failure: true
 
 # push_and_sign:
 #   stage: deploy
-#   image: docker:28.4.0
+#   image: docker:29.0.2
 #   services:
-#     - docker:28.4.0-dind
+#     - docker:29.0.2-dind
 #   variables:
 #     COSIGN_YES: "true"
 #   id_tokens:
