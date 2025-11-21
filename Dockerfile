@@ -1,6 +1,6 @@
 FROM debian:stable-slim AS base
 
-ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.10.1-debian10_amd64.deb /tmp/nessus.deb
+ADD https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.11.0-debian10_amd64.deb /tmp/nessus.deb
 
 RUN dpkg -i /tmp/*.deb
 
@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.source="https://github.com/ciro-mota/nessus-scann
 
 COPY --from=base /opt /opt
 
-RUN apk upgrade && apk add libgcc=15.2.0-r3 libstdc++=15.2.0-r3 --no-cache
+RUN apk upgrade && apk add libgcc=15.2.0-r6 libstdc++=15.2.0-r6 --no-cache
 
 EXPOSE 8834
 
