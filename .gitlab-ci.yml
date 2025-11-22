@@ -11,8 +11,7 @@ workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_CHANGED_PATHS == "Dockerfile"'
       when: always
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-      when: always
+
     - if: '$CI_PIPELINE_SOURCE == "push"'
       when: always
       changes:
