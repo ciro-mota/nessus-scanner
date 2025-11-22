@@ -1,8 +1,11 @@
+include:
+  - template: Jobs/Container-Scanning.gitlab-ci.yml
+
 default:
-  image: docker:28.4.0
+  image: docker:29.0.2
 
 services:
-  - docker:28.4.0-dind
+  - docker:29.0.2-dind
 
 workflow:
   rules:
@@ -54,33 +57,14 @@ Test:
 
 container_scanning:
   stage: scan
-  image: registry.gitlab.com/security-products/container-scanning:7
-  services:
-    - docker:28.4.0-dind
   variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
     CS_IMAGE: ciromota/nessus-scanner:latest
-    CS_DOCKERFILE_PATH: Dockerfile
-  before_script:
-    - docker build -t ciromota/nessus-scanner:latest .
-  script:
-    - gtcs scan
-  artifacts:
-    when: always
-    reports:
-      container_scanning: gl-container-scanning-report.json
-    paths:
-      - gl-container-scanning-report.json
-      - "**/gl-sbom-*.cdx.json"
-    expire_in: 30 days
-  allow_failure: true
 
 # push_and_sign:
 #   stage: deploy
-#   image: docker:28.4.0
+#   image: docker:29.0.2
 #   services:
-#     - docker:28.4.0-dind
+#     - docker:29.0.2-dind
 #   variables:
 #     COSIGN_YES: "true"
 #   id_tokens:
