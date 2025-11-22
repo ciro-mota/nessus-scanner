@@ -64,14 +64,14 @@ jobs:
         load: true
 
     - name: Run Trivy vulnerability scanner
-          id: scan
-          uses: aquasecurity/trivy-action@0.33.1
-          with:
-            image-ref: ciromota/nessus-scanner:latest
-            format: sarif
-            output: trivy-results.sarif
-            severity: CRITICAL,HIGH,MEDIUM,LOW
-            exit-code: 0
+      id: scan
+      uses: aquasecurity/trivy-action@0.33.1
+      with:
+        image-ref: ciromota/nessus-scanner:latest
+        format: sarif
+        output: trivy-results.sarif
+        severity: CRITICAL,HIGH,MEDIUM,LOW
+        exit-code: 0
     
     - name: Install Trivy CLI to generate GITHUB_STEP_SUMMARY
       run: |
