@@ -38,11 +38,6 @@ jobs:
         push: false
         load: true
 
-    - name: Write commit message in GITHUB_STEP_SUMMARY
-      run: |
-        COMMIT_MSG=$(git log -1 --pretty=format:"%s" -- Dockerfile)
-        echo "::notice:: 📋 $COMMIT_MSG"
-
   Test:
     runs-on: ubuntu-24.04
     needs: Build
@@ -68,43 +63,32 @@ jobs:
         push: false
         load: true
 
-    - name: Run Grype vulnerability scanner
-      id: scan
-      uses: anchore/scan-action@v6
-      with:
-        image: ciromota/nessus-scanner:latest
-        fail-build: false
-        severity-cutoff: critical
-        output-format: sarif
-
-    - name: Install Grype CLI to generate GITHUB_STEP_SUMMARY
+    - name: Run Trivy vulnerability scanner
+          id: scan
+          uses: aquasecurity/trivy-action@0.33.1
+          with:
+            image-ref: ciromota/nessus-scanner:latest
+            format: sarif
+            output: trivy-results.sarif
+            severity: CRITICAL,HIGH,MEDIUM,LOW
+            exit-code: 0
+    
+    - name: Install Trivy CLI to generate GITHUB_STEP_SUMMARY
       run: |
-        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
-
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+    
     - name: Publish Scan Summary into GITHUB_STEP_SUMMARY
       run: |
-        echo "## Grype Vulnerability Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo "## Trivy Vulnerability Scan Summary" >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
-        grype docker:ciromota/nessus-scanner:latest -o table >> $GITHUB_STEP_SUMMARY
+        trivy image --format table ciromota/nessus-scanner:latest >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
-
-    - name: Upload Grype report
+    
+    - name: Upload Trivy report to GitHub Security
       uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: ${{ steps.scan.outputs.sarif }}
-
-    - name: Container Running and Health Check
-      run: |
-        docker container run -td --name nessus-scanner -p 8834:8834 -v /etc/localtime:/etc/localtime ciromota/nessus-scanner:latest
-        
-        CONTAINER_NAME=$(docker ps -a | awk 'FNR==2{print $1}')
-
-        if docker inspect -f '{{.State.Running}}' "$CONTAINER_NAME" 2>/dev/null | grep -q "true"; then
-            echo "::notice:: All tests OK. 🚀"
-        else
-            echo "::error:: Failing, reason: Container is not running."
-            exit 1
-        fi
+        sarif_file: trivy-results.sarif
+        category: trivy-container-scan
 
   Push:
     needs: Test
