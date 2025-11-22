@@ -54,20 +54,25 @@ Test:
 
 container_scanning:
   stage: scan
+  image: registry.gitlab.com/security-products/container-scanning:7
+  services:
+    - docker:28.0.9-dind
   variables:
-    CS_IMAGE: $IMAGE_TAG
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    CS_IMAGE: ciromota/nessus-scanner:latest
+    CS_DOCKERFILE_PATH: Dockerfile
   before_script:
-    - apk add --no-cache wget
-    - wget -qO- https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+    - docker build -t ciromota/nessus-scanner:latest .
   script:
-    - docker build --cache-from ciromota/nessus-scanner:latest -t $IMAGE_TAG .
-    - grype $IMAGE_TAG -o template -t grype_gitlab.tpl --scope all-layers > gl-container-scanning-report.json
+    - gtcs scan
   artifacts:
     when: always
     reports:
       container_scanning: gl-container-scanning-report.json
     paths:
       - gl-container-scanning-report.json
+      - "**/gl-sbom-*.cdx.json"
     expire_in: 30 days
   allow_failure: true
 
