@@ -56,7 +56,7 @@ container_scanning:
   stage: scan
   image: registry.gitlab.com/security-products/container-scanning:7
   services:
-    - docker:28.0.9-dind
+    - docker:28.4.0-dind
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
